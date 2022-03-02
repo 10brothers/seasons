@@ -14,5 +14,10 @@ public class Application {
         AnnotationConfigApplicationContext aca = new AnnotationConfigApplicationContext();
 
         aca.register(Bird.class);
+
+        aca.refresh();
+
+        System.out.println( aca.getBean(Bird.class));
+
     }
 }
