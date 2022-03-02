@@ -1,4 +1,6 @@
-BeanFactory
+BeanFactory 
+访问Spring Bean容器的根接口，此接口定义了一些访问Bean的基本方法，一个BeanFactory会加载BeanDefinition，根据BeanDefinition返回其实例化对象
+
 
 ListableBeanFactory
 
