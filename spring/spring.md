@@ -3,13 +3,47 @@ BeanFactory
 
 
 ListableBeanFactory
+增加可以返回当前BeanFactory所持有注册进来的BeanDefinition列表，除了两个获取Bean的名称和实例映射的方法可以返回注册进来的单例Bean，其他几个方法只能返回通过BeanDefinition定义的Bean信息
 
 hierarchicalBeanFactory
-
-ConfigurableBeanFactory
+提供BeanFactory的继承关系，有了parentBeanFactory的层级
 
 AutowireCapableBeanFactory
+提供自动注入的能力，这个BeanFactory提供的都是一些写的方法，比如createBean，autowireBean，配置Bean的属性，注入依赖，解析依赖等
+
+ConfigurableBeanFactory
+除继承了HierarchicalBeanFactory 和 SingletonBeanRegistry外，增加了很多set/get方法，主要用于向BeanFactory增加一些配置内容。
+比如属性编辑器，内嵌值解析器，新增BeanPostProcessor，类型转换服务等
+
+
 
 ConfigurableListableBeanFactory
+增加了几个方法，更像是了继承了ListableBeanFactory AutowireCapableBeanFactory ConfigurableBeanFactory之后，
+为了更好的整合，补充的。可以分析和修改bean definition，以及预实例化单例bean
+
+
+
+SingletonBeanRegistry
+定义一个共享Bean实例的注册器，可以被BeanFactory继承，来实现统一的单例管理行为
+这个接口中实现的注册进来的单例Bean，都是在外部已经创建并初始化好的对象实例，在通过这个接口注册时，不会回调任何初始化方法，也不会有销毁方法的回调。
+接口的直接实现是DefaultSingletonBeanRegistry，注册进来的单例Bean，在这里被单独管理。
+
+DefaultSingletonBeanRegistry
+共享Bean实例的通用注册器，允许注册一个被所有此注册器调用者共享的实例对象，通过BeanName获取。
+这个类作为一个BeanFactory的基础服务类，即没有BeanDefinition的概念，也没有Bean的创建过程。
+
+beforeSingletonCreation afterSingletonCreation，会分别在Bean的创建前后被调用，如果Bean需要做创建中校验的话，会记录下当前Bean创建中，或者不在创建中
+
+几个getSingleton方法的实现逻辑
+
+getSingleton(String,boolean)
+在无锁的情况下依次从Map singletonObjects和earlySingletonObjects中根据beanName搜索，如果没有获取到，根据第二个参数是否允许从早期引用中获取。
+如果为true的话，在加锁的情况下，再检查一遍是否对应的Bean实例已经创建，如果还是没有创建，则从singletonFactories中查找是否存在ObjectFactory,
+如果能找到，就会创建一个Bean实例，并且记录到earlySingletonObjects，移除已经执行过的ObjectFactory
+
+getSingleton(String,ObjectFactory<?>)
+对singletonObjects加锁，然后查找是否有对应的实例存在，如果不存在且没有在销毁阶段，记录下正在创建的Bean，开始回调ObjectFactory#getObject方法，
+在finally中从正在创建的Bean Map中移除此BeanName，并且调用addSingleton方法，写入到singletonObjects
+
 
 
