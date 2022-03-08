@@ -1,5 +1,7 @@
 package org.seasons.spring.winds;
 
+import org.seasons.spring.winds.aop.AopConfiguration;
+import org.seasons.spring.winds.aop.BirdService;
 import org.seasons.spring.winds.model.Bird;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -13,11 +15,12 @@ public class Application {
     public static void main (String[] args) {
         AnnotationConfigApplicationContext aca = new AnnotationConfigApplicationContext();
 
-        aca.register(Bird.class);
+        aca.register(AopConfiguration.class);
 
         aca.refresh();
 
-        System.out.println( aca.getBean(Bird.class));
+        aca.getBean(BirdService.class).feed();
+        System.out.println( );
 
     }
 }

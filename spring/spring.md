@@ -45,5 +45,22 @@ getSingleton(String,ObjectFactory<?>)
 对singletonObjects加锁，然后查找是否有对应的实例存在，如果不存在且没有在销毁阶段，记录下正在创建的Bean，开始回调ObjectFactory#getObject方法，
 在finally中从正在创建的Bean Map中移除此BeanName，并且调用addSingleton方法，写入到singletonObjects
 
+addSingletonFactory(String, ObjectFactory<?>)
+添加一个ObjectFactory，添加之前会校验同名的name是否已经存在了Bean的单实例，不存在的情况下，才会新增成功
+
+如何解决循环依赖
+
+如果循环依赖出现在构造器注入的情况下，无论如何都解决不了的。循环依赖有个配置项来配置是否开启
+
+Bean的创建开始于getBean方法的调用，在doGetBean方法中，会调用getSingleton(String,ObjectFactory<?>)，这个方法中会回调createBean，
+createBean方法中，创建对象实例，然后判断当前Bean是否创建中、是否允许循环依赖、是否单例Bean，如果都满足，就表示提前暴露Bean的实例对象，也
+就是会调用addSingletonFactory(String, ObjectFactory<?>)方法，以后就会执行自动注入populateBean，在处理依赖的Bean时，假如遇到了
+被依赖的Bean又依赖了这个Bean，也就是循环依赖了，就会试图get这个Bean，然后调用getSingleton(String)方法，之后就会从singletonObjects找到
+上面添加的ObjectFactory，从而拿到之前的Bean实例对象，解决了循环依赖的问题。
+
+这其中注意到add进来的ObjectFactory里调用的是getEarlyBeanReference方法，这个方法是可以返回代理对象实例的。这种是作为依赖时且是需要代理的Bean
+
+如果是一个代理Bean，直接getBean，在什么时候被代理的？
+
 
 
