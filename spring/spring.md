@@ -63,4 +63,21 @@ createBean方法中，创建对象实例，然后判断当前Bean是否创建中
 如果是一个代理Bean，直接getBean，在什么时候被代理的？
 
 
+Bean的创建过程是包含在获取Bean的过程中的
+1、调用getBean
+2、调用getSingleton，尝试从缓存中查找手动注册的Bean，这个期间会按照顺序查询DefaultSingletonBeanRegistry#singletonObject，如果要查找的Bean
+正在创建中（出现循环引用时），尝试从earlySingletonObjects中查找。还没有的话，尝试从singletonFactories获取ObjectFactory，如果存在，获取到Bean
+实例，然后写入earlySingletonObjects，移除ObjectFactory
+3、上一步能找到则返回，找不到开始创建
+4、将创建过程，包装成ObjectFactory，在getSingleton方法中进行回调。在实际的回调前后，会把这个Bean加入到正在创建的Bean集合中
+5、createBean的过成中，先使用反射创建实例对象，之后根据是否单例对象、Bean是否创建中、是否允许引用，来判断是否应该在Bean还没有
+创建好的情况，将Bean实例暴露出去，所谓的暴露就是调用addSingletonFactory方法，包含了已创建的Bean原始实例对象，也就是在singletonFactories这个Map
+增加一个ObjectFactory，这个ObjectFactory持有刚刚创建的实例对象
+6、对Bean的属性做填充（属性填充的过程过中，会涉及到依赖Bean的创建，回到1的过程）
+7、调用Bean的初始化方法，在初始化前后，会调用postProcessBeforeBeanInitialization和postProcessAfterBeanInitialization，后者可以返回一个代理对象，
+也是Spring AOP中创建代理对象的位置。
+8、方法栈再次回到getSingleton方法，将当前Bean从正在创建Bean集合中移除，然后从earlySingletonObjects移除，向singletonObjects新增一个单例对象。
+9、一个Bean的创建结束
+
+
 
