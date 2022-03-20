@@ -80,4 +80,23 @@ Bean的创建过程是包含在获取Bean的过程中的
 9、一个Bean的创建结束
 
 
+AOP
 
+pointcut 用于将advise和特定的类或者方法关联起来的，类似定位器
+
+advice before after around throwing  advice是AOP Alliance的概念，Spring AOP使用MethodInterceptor来实现的
+
+pointcut和advice就构成了一个Advisor，表示由pointcut指定的位置执行advice的动作
+
+
+cglib代理类结构
+代理类继承自被代理类，实现Factory接口
+字段：
+
+Callback、
+
+根据给定的父类Class，Callback列表
+
+Spring对Cglib做了一些改动，比如每个代理类都实现了Advised接口，可以用来获取和代理有关的很多信息。
+
+Cglib代理的

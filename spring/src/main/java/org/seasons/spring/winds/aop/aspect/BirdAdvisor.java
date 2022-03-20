@@ -1,4 +1,4 @@
-package org.seasons.spring.winds.aop;
+package org.seasons.spring.winds.aop.aspect;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -13,12 +13,12 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class BirdAdvisor {
 
-    @Pointcut("execution(public * org.seasons.spring.winds.aop.BirdService.*(..))")
+    @Pointcut("execution(public * org.seasons.spring.winds.aop.XxOoService.doXx(..))")
     public void pointcut(){}
 
     @Before(value = "pointcut()")
     public void before() {
-        System.out.println("before");
+        System.out.println("aspectJ before");
     }
 
 

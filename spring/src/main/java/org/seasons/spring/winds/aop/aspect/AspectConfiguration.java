@@ -1,5 +1,6 @@
-package org.seasons.spring.winds.aop;
+package org.seasons.spring.winds.aop.aspect;
 
+import org.seasons.spring.winds.aop.XxOoService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -12,11 +13,11 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  */
 @EnableAspectJAutoProxy
 @Configuration
-public class AopConfiguration {
+public class AspectConfiguration {
 
     @Bean
-    public BirdService birdService () {
-        return new BirdService();
+    public XxOoService birdService () {
+        return new XxOoService();
     }
 
     @Bean
