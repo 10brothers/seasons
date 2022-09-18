@@ -1,0 +1,4 @@
+
+参照SpringBoot使用内嵌Tomcat的方式，在SpringFramework环境下使用内嵌Tomcat
+
+使用内嵌的Tomcat容器，基于注解的配置类
