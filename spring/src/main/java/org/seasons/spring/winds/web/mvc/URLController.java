@@ -8,7 +8,7 @@ public class URLController {
 
     @GetMapping("/")
     public String get() {
-        return "hello";
+        return "\n";
     }
 
 }
