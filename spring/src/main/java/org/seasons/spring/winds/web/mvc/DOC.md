@@ -15,3 +15,10 @@ handle执行前后的扩展点
 
 都涉及到converter，
 
+
+handler方法最终会通过反射获取Method对象，然后包装成 InvocableHandlerMethod  这一步哪里处理？
+
+
+DataBinder
+
+WebDataBinder 将Web请求参数绑定到JavaBean对象上 
