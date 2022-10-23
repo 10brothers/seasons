@@ -127,6 +127,7 @@ public class AnnotationServletWebServerApplicationContext extends GenericWebAppl
     @Override
     protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
         beanFactory.addBeanPostProcessor(new WebApplicationContextServletContextAwareProcessor(this));
+        // 忽略ServletContextAwareProcessor去处理ServletContextAware类
         beanFactory.ignoreDependencyInterface(ServletContextAwareProcessor.class);
         if (this.basePackages != null && this.basePackages.length > 0) {
             this.scanner.scan(this.basePackages);
