@@ -15,7 +15,7 @@
     <modules>
         <module>spring</module>
         <module>summer</module>
-        <module>infrastructure</module>
+        <module>soil</module>
     </modules>
 
     <properties>

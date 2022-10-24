@@ -1,4 +1,4 @@
-package org.seasons.infrastructure;
+package org.seasons.soil;
 
 /**
  * Hello world!
