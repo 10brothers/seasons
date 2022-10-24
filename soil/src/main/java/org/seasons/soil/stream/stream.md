@@ -1,19 +1,18 @@
-# 1
-Stream 
+# 关键接口
+
+##Stream 
 支持串行或者并行聚合操作的一系列元素的集合，就是流。是数据操作的源头
 
-StreamShape
+##StreamShape
 Stream的类型，每一个枚举值对应一个BaseStream的子类
 
-TerminalOp
-
-Sink
+##Sink
 译过来表示水槽下沉的意思，继承Consumer接口
 
-TerminalSink 
-Sink的子接口，同时由继承了Supplier接口，也就是既可以消费数据，又可以产生结果
+##TerminalSink 
+Sink的子接口，同时由继承了Supplier接口，也就是既可以消费数据，又可以产生结果。TerminalSink是一个流操作中最后一个Sink
 
-AbstractPipeline 
+## AbstractPipeline 
 Stream接口的核心实现
 直接子类有ReferencePipeline IntPipeline LongPipeline DoublePipeline
 
@@ -45,9 +44,20 @@ StatefulOp
 ChainedReference实例中会保存下一个阶段的downstream（Sink），然后在本阶段的Sink执行后，根据执行到的结果决定是否调用下一个Sink
 
 
-Spliterator
+## Spliterator
 流的数据源，
 
+## TerminalOp
+所有的流只有终止动作才会触发具体的数据流动，没有TerminalOp不会触发实际的数据流动。一般TerminalOp的实现类也需要继承TerminalSink接口
+
+
+# 示例流程
+```java
+    Stream<String> stringStream = Stream.of("1", "2", "3");
+    Stream<String> filterStream = stringStream.filter(a -> a.equals("2"));
+    Stream<Integer> mapStream = filterStream.map(Integer::valueOf);
+    long count = mapStream.count();
+```
 
 流刚创建时，类型为你ReferencePipeline.Head 仅仅引用Spliterator实例
 
