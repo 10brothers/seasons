@@ -22,6 +22,7 @@ public class RocketDemo {
 
         DefaultMQProducer defaultMQProducer = new DefaultMQProducer();
         defaultMQProducer.setNamesrvAddr("");
+        defaultMQProducer.setProducerGroup("topic-a-group");
         Message message = new Message();
         message.setTopic("topic-a");
         message.setBody("abc".getBytes(StandardCharsets.UTF_8));
@@ -35,13 +36,16 @@ public class RocketDemo {
         DefaultMQPushConsumer defaultMQPushConsumer = new DefaultMQPushConsumer();
         defaultMQPushConsumer.setNamesrvAddr("");
         defaultMQPushConsumer.subscribe("topic-a", "*");
+        defaultMQPushConsumer.setConsumerGroup("topic-a-group");
         defaultMQPushConsumer.setMessageListener((MessageListenerOrderly) (list, consumeOrderlyContext) -> null);
-
+        defaultMQPushConsumer.start();
 
         DefaultLitePullConsumer defaultLitePullConsumer = new DefaultLitePullConsumer();
         defaultLitePullConsumer.setNamesrvAddr("");
         try {
             defaultLitePullConsumer.subscribe("topic-a", "*");
+            defaultLitePullConsumer.setConsumerGroup("topic-a-group");
+            defaultLitePullConsumer.start();
             List<MessageExt> pollMsgList;
 
             while (true) {
